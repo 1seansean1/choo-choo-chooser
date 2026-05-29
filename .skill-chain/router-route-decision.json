@@ -1,0 +1,62 @@
+{
+  "schema": "route-decision.v1",
+  "run_id": "RUN-20260528-CCC-001",
+  "started_at": "2026-05-28T19:00:00-06:00",
+  "finished_at": "2026-05-28T19:21:00-06:00",
+  "operator": "sean.p.allen9@gmail.com",
+  "target": "C:/Users/seanp/Workspace/choo-choo-chooser",
+  "input_artifact": "C:/Users/seanp/Downloads/Choo Choo Chooser.zip",
+  "entry_point": "phase-7-partition-extractor (forward drive from a fresh prototype)",
+  "stop_condition": "release-gate PASS + live deploy verified + zero remaining planned-but-unbuilt units",
+  "phases": [
+    { "id": 1,  "skill": "lit-review",            "status": "skipped",   "rationale": "built prototype is not a research artifact" },
+    { "id": 2,  "skill": "research-prompt",       "status": "skipped",   "rationale": "not applicable to a built prototype" },
+    { "id": 7,  "skill": "partition-extractor",   "status": "done",      "artifact": "docs/partition/omega-space.v1.md" },
+    { "id": 8,  "skill": "capability-tree",       "status": "done",      "artifact": "docs/partition/capability-tree.v1.md" },
+    { "id": 9,  "skill": "requirements-engineer", "status": "done",      "artifact": "docs/requirements/requirement-set.v1.md", "count": 36 },
+    { "id": 10, "skill": "solution-architect",    "status": "done",      "artifact": "docs/architecture/architecture.v1.md" },
+    { "id": 10, "skill": "test-designer",         "status": "done",      "artifact": "docs/test/test-set.v1.md", "cases": 27 },
+    { "id": 11, "skill": "release-planner",       "status": "done",      "artifact": "docs/planning/plan.v1.md", "releases": ["R1","R2","R3","R4"] },
+    { "id": 14, "skill": "sprint-runner",         "status": "done",      "sub": [
+       { "release": "R1", "scope": "prototype",            "status": "as-imported" },
+       { "release": "R2", "scope": "Vite migration",       "status": "shipped", "commit": "e9ce86f" },
+       { "release": "R3", "scope": "vitest 39/39 green",   "status": "shipped", "commit": "8e2d304" },
+       { "release": "R4", "scope": "README+LICENSE+CI",    "status": "shipped", "commit": "15e7199" }
+    ]},
+    { "id": 15, "skill": "test-evaluator",        "status": "done",      "artifact": "docs/review/test-eval-report.v1.md", "result": "PASS" },
+    { "id": 15, "skill": "sprint-retrospective",  "status": "done",      "artifact": "docs/review/retrospective.v1.md" },
+    { "id": 16, "skill": "codebase-review",       "status": "done",      "artifact": "docs/review/codebase-review-report.v1.md", "initial_gate": "CONDITIONAL", "findings": 8 },
+    { "id": 17, "skill": "finding-remediation",   "status": "done",      "artifact": "docs/remediation/remediation-record.v1.md", "closed": 4, "waived": 1, "deferred": 3, "final_gate": "PASS" }
+  ],
+  "remaining_units": [],
+  "deferred_followups": [
+    "TD-01: React component-level tests (jsdom + RTL)",
+    "TD-02: split src/all.jsx back into per-file ESM modules",
+    "TD-05: LLM preference path only fires inside Claude.ai artifact runtime",
+    "TD-06: PWA recipe (manifest + service worker)",
+    "TD-07: analytics / error tracking",
+    "FND-RP-06: localStorage account.email cleartext (defer until real auth)",
+    "FND-RP-07: self-host Google Fonts to remove third-party CDN",
+    "WVR-CCC-001: vite<6 dev-server source-map advisory — wait for vite 5.x patch or Vite-8 migration",
+    "AcqForge program registration (CCC100) — offer at close-out"
+  ],
+  "deliverables": {
+    "repo": "https://github.com/1seansean1/choo-choo-chooser",
+    "live": "https://1seansean1.github.io/choo-choo-chooser/",
+    "live_mapviewer": "https://1seansean1.github.io/choo-choo-chooser/mapviewer.html",
+    "test_command": "npm test",
+    "build_command": "npm run build",
+    "ci_workflow": ".github/workflows/deploy.yml"
+  },
+  "metrics": {
+    "requirements_total": 36,
+    "requirements_T_marked": 16,
+    "requirements_T_passing": 16,
+    "tests_total": 39,
+    "tests_passing": 39,
+    "build_produces_dist": true,
+    "no_babel_in_dist": true,
+    "console_errors_on_live": 0,
+    "commits": 6
+  }
+}
