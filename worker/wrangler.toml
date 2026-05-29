@@ -1,0 +1,11 @@
+name = "choo-choo-checkout"
+main = "src/index.js"
+compatibility_date = "2025-05-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://1seansean1.github.io,http://localhost:5173,http://127.0.0.1:5180,http://127.0.0.1:5181"
+SUCCESS_URL    = "https://1seansean1.github.io/choo-choo-chooser/?session_id={CHECKOUT_SESSION_ID}"
+CANCEL_URL     = "https://1seansean1.github.io/choo-choo-chooser/?checkout=cancelled"
+
+# Secrets (set after `wrangler login`):
+#   wrangler secret put STRIPE_SECRET_KEY

@@ -25,6 +25,11 @@ window.OP_COLORS = new Proxy({}, { get: () => REGION_COLORS["North America"] });
 // Card/Detail components look up by route.id and fall back to <Scene/>.
 window.ROUTE_IMAGES = routeImagesDoc.images;
 
+// Stripe Checkout backend URL. Set at build time via VITE_CHECKOUT_API_URL.
+// When present, the Checkout component redirects to a real Stripe-hosted page;
+// when absent, it falls back to the prototype's mock confirmation flow.
+window.CHECKOUT_API_URL = import.meta.env.VITE_CHECKOUT_API_URL || "";
+
 // Store + price + formatter + hook. window.claude is provided by the Claude.ai
 // artifact runtime; outside it, preference parsing falls back to the heuristic.
 const store = createStore(ROUTES, REGIONS, typeof window !== "undefined" ? window.claude : null);

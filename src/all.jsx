@@ -1392,16 +1392,36 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
   const fromCart = opts && opts.fromCart;
   const acct = s.state.account;
 
+  const returned = opts && opts.returnedSession;
   const [items, setItems] = React.useState(() => inItems.map(it => ({ ...it })));
-  const [step, setStep] = React.useState(1);
-  const [email, setEmail] = React.useState(acct ? acct.email : "");
+  const [step, setStep] = React.useState(returned ? 3 : 1);
+  const [email, setEmail] = React.useState(returned ? (returned.email || "") : (acct ? acct.email : ""));
   const [pm, setPm] = React.useState(acct && acct.cards.length ? acct.cards[0].id : "new");
   const [card, setCard] = React.useState({ name: "", num: "", exp: "", cvc: "", zip: "" });
   const [saveCard, setSaveCard] = React.useState(!!acct);
   const [createAcct, setCreateAcct] = React.useState(false);
   const [acctPw, setAcctPw] = React.useState("");
   const [processing, setProcessing] = React.useState(false);
-  const [conf, setConf] = React.useState(null);
+  const [conf, setConf] = React.useState(() => {
+    if (!returned) return null;
+    return {
+      code: returned.id || ("STRIPE-" + Date.now().toString(36).toUpperCase()),
+      paymentIntent: returned.paymentIntent,
+      amountTotalCents: returned.amountTotal,
+      currency: returned.currency,
+      livemode: returned.livemode,
+      stripe: true,
+      tickets: (inItems || []).map(it => ({
+        id: it.id || Math.random().toString(36).slice(2),
+        name: it.name,
+        route: (it.origin || "").split(",")[0] + " → " + (it.destination || "").split(",")[0],
+        coach: String.fromCharCode(65 + Math.floor(Math.random() * 6)) + Math.ceil(Math.random() * 14),
+        seat: Math.ceil(Math.random() * 60) + "ABCD"[Math.floor(Math.random() * 4)],
+        roundTrip: !!it.roundTrip,
+        className: it.className,
+      })),
+    };
+  });
 
   const RC = window.RAIL.regionColors;
   const P = window.CCCPrice;
@@ -1423,26 +1443,84 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
   function setItem(patch) { setItems([{ ...items[0], ...patch }]); }
   const route0 = headItem.route || P.routeById(headItem.routeId);
 
-  function pay(viaLink) {
+  async function pay(viaLink) {
     setProcessing(true);
-    setTimeout(() => {
-      const tickets = items.map(it => ({
-        id: it.id || Math.random().toString(36).slice(2),
-        name: it.name, route: _city(it.origin) + " → " + _city(it.destination),
-        coach: String.fromCharCode(65 + Math.floor(Math.random() * 6)) + Math.ceil(Math.random() * 14),
-        seat: Math.ceil(Math.random() * 60) + "ABCD"[Math.floor(Math.random() * 4)],
-        roundTrip: it.roundTrip, className: it.className,
+
+    // Persist account/card preferences BEFORE we hand off to Stripe — they
+    // should survive the redirect.
+    const newCard = usingNew && cardValid ? { brand, last4: _digits(card.num).slice(-4), exp: card.exp, name: card.name } : null;
+    if (createAcct && !acct && emailValid) window.Store.createAccount(card.name || email.split("@")[0], email, newCard);
+    else if (saveCard && acct && newCard) window.Store.addCard(newCard);
+
+    // Remember the cart items so the return-from-Stripe handler can render
+    // a real "Booking confirmed" panel from the same data we charged for.
+    try {
+      sessionStorage.setItem("ccc_pending_checkout", JSON.stringify({
+        items: items.map(it => ({
+          routeId: it.routeId || (it.route && it.route.id),
+          name: it.name,
+          region: it.region,
+          operator: it.operator,
+          origin: it.origin,
+          destination: it.destination,
+          className: it.className,
+          classIdx: it.classIdx,
+          adults: it.adults,
+          kids: it.kids,
+          roundTrip: !!it.roundTrip,
+          date: it.date,
+          time: it.time,
+        })),
+        email,
+        fromCart: !!fromCart,
+        t: Date.now(),
       }));
-      const code = "CCC-" + Math.random().toString(36).slice(2, 6).toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
-      // save card / create account
-      const newCard = usingNew && cardValid ? { brand, last4: _digits(card.num).slice(-4), exp: card.exp, name: card.name } : null;
-      if (viaLink && !acct) { /* link express: nothing persisted */ }
-      if (createAcct && !acct && emailValid) window.Store.createAccount(card.name || email.split("@")[0], email, newCard);
-      else if (saveCard && acct && newCard) window.Store.addCard(newCard);
-      if (fromCart) window.Store.clearCart();
-      setConf({ code, tickets });
-      setProcessing(false); setStep(3);
-    }, 1500);
+    } catch {}
+
+    // If the backend isn't configured, fall back to the original mock so the
+    // app still works for local dev / portfolio viewing.
+    if (!window.CHECKOUT_API_URL) {
+      setTimeout(() => {
+        const tickets = items.map(it => ({
+          id: it.id || Math.random().toString(36).slice(2),
+          name: it.name, route: _city(it.origin) + " → " + _city(it.destination),
+          coach: String.fromCharCode(65 + Math.floor(Math.random() * 6)) + Math.ceil(Math.random() * 14),
+          seat: Math.ceil(Math.random() * 60) + "ABCD"[Math.floor(Math.random() * 4)],
+          roundTrip: it.roundTrip, className: it.className,
+        }));
+        const code = "MOCK-" + Math.random().toString(36).slice(2, 6).toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
+        if (fromCart) window.Store.clearCart();
+        setConf({ code, tickets, mock: true });
+        setProcessing(false); setStep(3);
+      }, 700);
+      return;
+    }
+
+    // Real path: ask the Worker for a Stripe Checkout Session and redirect.
+    try {
+      const r = await fetch(window.CHECKOUT_API_URL.replace(/\/$/, "") + "/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email || (acct && acct.email) || "",
+          items: items.map(it => ({
+            routeId: it.routeId || (it.route && it.route.id),
+            classIdx: it.classIdx,
+            adults: it.adults,
+            kids: it.kids,
+            roundTrip: !!it.roundTrip,
+            date: it.date,
+            time: it.time,
+          })),
+        }),
+      });
+      const j = await r.json();
+      if (!r.ok || !j.url) throw new Error(j.error || `checkout failed (${r.status})`);
+      window.location.assign(j.url);
+    } catch (e) {
+      setProcessing(false);
+      window.Store.toast("Checkout error: " + e.message);
+    }
   }
 
   return (
@@ -1558,7 +1636,18 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
           {/* ---------- STEP 3: confirmation ---------- */}
           {step === 3 && conf && <div className="ticket">
             <div className="tk-check"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12l5 5L20 6" /></svg></div>
-            <div className="tk-conf">Confirmation <strong className="mono">{conf.code}</strong> · emailed to {email || "you"}</div>
+            {conf.stripe ? (
+              <div className="tk-conf">
+                Stripe session <strong className="mono">{(conf.code || "").slice(0, 24)}…</strong>
+                {conf.amountTotalCents != null && (
+                  <> · charged <strong>${(conf.amountTotalCents / 100).toFixed(2)} {(conf.currency || "usd").toUpperCase()}</strong></>
+                )}
+                {" · "}{conf.livemode ? <strong style={{color: "var(--rust)"}}>LIVE MODE</strong> : <span>test mode — no real charge</span>}
+                {email && <> · emailed to <strong>{email}</strong></>}
+              </div>
+            ) : (
+              <div className="tk-conf">Confirmation <strong className="mono">{conf.code}</strong> · emailed to {email || "you"}{conf.mock && <> · <span style={{color: "var(--ink-faint)"}}>mock</span></>}</div>
+            )}
             {conf.tickets.map((tk, i) => (
               <div className="tk-stub" key={tk.id} style={{ marginBottom: 10 }}>
                 <div className="tk-route"><span className="serif">{tk.route.split(" → ")[0]}</span><svg width="24" height="13" viewBox="0 0 26 14" fill="none" stroke={headColor.fg} strokeWidth="2" strokeLinecap="round"><path d={tk.roundTrip ? "M1 5h22M18 1l5 4-5 4M25 9H3M8 13l-5-4 5-4" : "M1 7h22M18 2l5 5-5 5"} /></svg><span className="serif">{tk.route.split(" → ")[1]}</span></div>
@@ -2232,6 +2321,58 @@ function App() {
     document.documentElement.style.setProperty("--accent", accent);
     document.body.setAttribute("data-theme", t.dark ? "dark" : "light");
   }, [accent, t.dark]);
+
+  // Return-from-Stripe: if the URL has ?session_id=cs_test_..., fetch the
+  // session from the Worker, clear the cart, and open the Checkout component
+  // pre-loaded onto its confirmation step with the real Stripe details.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const sessionId = url.searchParams.get("session_id");
+    const cancelled = url.searchParams.get("checkout") === "cancelled";
+    if (cancelled) {
+      url.searchParams.delete("checkout");
+      window.history.replaceState({}, "", url.pathname + (url.search ? url.search : "") + url.hash);
+      window.Store.toast("Checkout cancelled");
+      return;
+    }
+    if (!sessionId || !window.CHECKOUT_API_URL) return;
+    let cancelledFlag = false;
+    (async () => {
+      try {
+        const r = await fetch(window.CHECKOUT_API_URL.replace(/\/$/, "") + "/api/session/" + encodeURIComponent(sessionId));
+        const j = await r.json();
+        if (cancelledFlag) return;
+        if (!r.ok) throw new Error(j.error || "session lookup failed");
+        let pending = null;
+        try { pending = JSON.parse(sessionStorage.getItem("ccc_pending_checkout") || "null"); } catch {}
+        // Reconstruct the items the Checkout component expects.
+        const items = (pending && pending.items) || [];
+        if (j.payment_status === "paid") {
+          if (pending && pending.fromCart) window.Store.clearCart();
+          window.Store.openCheckout(items, {
+            returnedSession: {
+              id: j.id,
+              email: j.customer_email,
+              paymentIntent: j.payment_intent,
+              amountTotal: j.amount_total,
+              currency: j.currency,
+              livemode: j.livemode,
+            },
+            fromCart: !!(pending && pending.fromCart),
+          });
+          sessionStorage.removeItem("ccc_pending_checkout");
+        } else {
+          window.Store.toast("Payment " + (j.payment_status || "incomplete"));
+        }
+      } catch (e) {
+        window.Store.toast("Checkout return error: " + e.message);
+      } finally {
+        url.searchParams.delete("session_id");
+        window.history.replaceState({}, "", url.pathname + (url.search ? url.search : "") + url.hash);
+      }
+    })();
+    return () => { cancelledFlag = true; };
+  }, []);
 
   // apply LLM-built default filters once when a logged-in user's prefs arrive
   const acctPrefs = store.state.account && store.state.account.prefs;
