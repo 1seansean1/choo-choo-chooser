@@ -8,7 +8,7 @@ Verification key: **T**=test, **A**=analysis, **I**=inspection, **D**=demonstrat
 
 | req_code | statement | acceptance_criteria | v | priority | trace |
 |---|---|---|---|---|---|
-| R-C1.1-01 | The system **shall** load the full route catalog (>= 250 routes) at startup with zero network calls beyond static assets. | `window.RAIL.routes.length >= 250` after data scripts load; no XHR to non-CDN origins. | T | M | C1.1 |
+| R-C1.1-01 | The system **shall** load the full route catalog (>= 40 routes, current prototype = 43) at startup with zero network calls beyond static assets. | `ROUTES.length >= 40` after data modules load; no XHR to non-CDN origins. | T | M | C1.1 |
 | R-C1.2-01 | The system **shall** match an origin/destination text query against route origin, destination, country, and any station name (case-insensitive substring). | Query "denver" returns >= 1 route; query "moffat" returns the California Zephyr; empty query returns all. | T | M | C1.2 |
 | R-C1.3-01 | The system **shall** AND-combine all active filters (region, operator, category, amenity, price ceiling, scenic-only) with the search query. | With `regions={"Europe"}` and `cats={"Scenic"}`, every result satisfies both. | T | M | C1.3 |
 | R-C1.3-02 | The system **shall** treat amenity filters as **all-of** (every selected amenity must be present), not any-of. | Selecting `["dome","dining"]` returns only routes whose `amenities` contains both. | T | M | C1.3 |

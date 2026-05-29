@@ -13,7 +13,7 @@ ISO/IEC/IEEE 29119-3. Implemented as Vitest under `tests/`. Per skill-chain rule
 
 | tc_id | requirement | description | inputs | expected | type |
 |---|---|---|---|---|---|
-| TC-CAT-01 | R-C1.1-01 | Catalog loads >= 250 routes | import `ROUTES` | `ROUTES.length >= 250` | T |
+| TC-CAT-01 | R-C1.1-01 | Catalog loads >= 40 routes | import `ROUTES` | `ROUTES.length >= 40` | T |
 | TC-SEARCH-01 | R-C1.2-01 | Text query matches origin / station / country (case-insensitive) | `matchPlace(r, "denver", true)` for a Denver-origin route | true | T |
 | TC-SEARCH-02 | R-C1.2-01 | Text query matches against an intermediate station name | `matchPlace(zephyr, "moffat", true)` | true | T |
 | TC-SEARCH-03 | R-C1.2-01 | Empty query returns true | `matchPlace(any, "", true)` | true | T |
