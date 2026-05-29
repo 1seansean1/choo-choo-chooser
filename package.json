@@ -6,7 +6,7 @@
   "description": "Worldwide passenger-rail discovery and booking — a personal prototype.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/build-sitemap.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"

@@ -2426,6 +2426,19 @@ function App() {
     document.body.setAttribute("data-theme", t.dark ? "dark" : "light");
   }, [accent, t.dark]);
 
+  // ?route=<id> deep link — landing from sitemap / SEO / shared URL opens the
+  // matching route's Detail panel and updates the document title for indexability.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const id = url.searchParams.get("route");
+    if (!id || !window.RAIL) return;
+    const r = window.RAIL.routes.find((x) => x.id === id);
+    if (r) {
+      setOpen(r);
+      document.title = `${r.name} — ${r.origin} → ${r.destination} · Choo Choo Chooser`;
+    }
+  }, []);
+
   // Return-from-Stripe: if the URL has ?session_id=cs_test_..., fetch the
   // session from the Worker, clear the cart, and open the Checkout component
   // pre-loaded onto its confirmation step with the real Stripe details.

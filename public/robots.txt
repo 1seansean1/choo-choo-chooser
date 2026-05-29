@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://choo-choo-chooser.vercel.app/sitemap.xml
