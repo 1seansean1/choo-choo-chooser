@@ -45,13 +45,13 @@ ISO/IEC/IEEE 29119-3. Implemented as Vitest under `tests/`. Per skill-chain rule
 
 | req | verification | bound tests | status |
 |---|---|---|---|
-| R-C1.1-01 | T | TC-CAT-01 | (run-pending) |
-| R-C1.2-01 | T | TC-SEARCH-01, -02, -03 | (run-pending) |
-| R-C1.3-01 | T | TC-FILT-01 | (run-pending) |
-| R-C1.3-02 | T | TC-FILT-02 | (run-pending) |
-| R-C1.3-03 | T | TC-FILT-03 | (run-pending) |
-| R-C1.4-01 | T | TC-SORT-01 | (run-pending) |
-| R-C1.5-01 | T | TC-LUCKY-01, -02 | (run-pending) |
+| R-C1.1-01 | T | TC-CAT-01 | **passed** |
+| R-C1.2-01 | T | TC-SEARCH-01, -02, -03 | **passed** |
+| R-C1.3-01 | T | TC-FILT-01 | **passed** |
+| R-C1.3-02 | T | TC-FILT-02 | **passed** |
+| R-C1.3-03 | T | TC-FILT-03 | **passed** |
+| R-C1.4-01 | T | TC-SORT-01 | **passed** |
+| R-C1.5-01 | T | TC-LUCKY-01, -02 | **passed** |
 | R-C2.1-01 | I | — | inspection |
 | R-C2.2-01 | D | — | demonstration |
 | R-C2.3-01 | I | — | inspection |
@@ -60,25 +60,25 @@ ISO/IEC/IEEE 29119-3. Implemented as Vitest under `tests/`. Per skill-chain rule
 | R-C3.2-01 | D | — | demonstration |
 | R-C3.3-01 | I | — | inspection |
 | R-C4.1-01 | D | — | demonstration |
-| R-C4.2-01 | T | TC-PLAN-01 | (run-pending) |
+| R-C4.2-01 | T | TC-PLAN-01 | **passed** |
 | R-C4.3-01 | D | — | demonstration |
-| R-C5.1-01 | T | TC-PRICE-01 | (run-pending) |
-| R-C5.1-02 | T | TC-PRICE-02, -03 | (run-pending) |
-| R-C5.3-01 | T | TC-CART-01, -02, -03 | (run-pending) |
-| R-C5.3-02 | T | TC-CART-04 | (run-pending) |
+| R-C5.1-01 | T | TC-PRICE-01 | **passed** |
+| R-C5.1-02 | T | TC-PRICE-02, -03 | **passed** |
+| R-C5.3-01 | T | TC-CART-01, -02, -03 | **passed** |
+| R-C5.3-02 | T | TC-CART-04 | **passed** |
 | R-C5.2-01 | D | — | demonstration |
 | R-C5.4-01 | D | — | demonstration |
 | R-C6.1-01 | D | — | demonstration |
-| R-C6.2-01 | T | TC-PREF-01..04 | (run-pending) |
-| R-C6.2-02 | T | TC-PREF-05 | (run-pending) |
-| R-C6.3-01 | T | TC-DEAL-01, -02 | (run-pending) |
+| R-C6.2-01 | T | TC-PREF-01..04 | **passed** |
+| R-C6.2-02 | T | TC-PREF-05 | **passed** |
+| R-C6.3-01 | T | TC-DEAL-01, -02 | **passed** |
 | R-C6.4-01 | I | — | inspection |
 | R-C7.1-01 | I | — | inspection |
 | R-C7.2-01 | I | — | inspection |
 | R-C7.3-01 | D | — | demonstration |
-| R-C8.1-01 | T | TC-BUILD-01 | (run-pending) |
-| R-C8.1-02 | T | TC-BUILD-02 | (run-pending) |
-| R-C8.2-01 | T | (the suite itself; meta) | (run-pending) |
+| R-C8.1-01 | T | TC-BUILD-01 | **passed** |
+| R-C8.1-02 | T | TC-BUILD-02 | **passed** |
+| R-C8.2-01 | T | (the suite itself; meta) | **passed** |
 | R-C8.3-01 | D | — | demonstration |
 | R-C8.4-01 | I | — | inspection |
 | R-C8.4-02 | I | — | inspection |
