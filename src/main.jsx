@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 
 import { AM, REGIONS, REGION_COLORS, routeColor, ROUTES } from "./data/index.js";
 import { createStore, makeUseStore, CCCPrice, money } from "./lib/store.js";
+import routeImagesDoc from "./data/route-images.json";
 import "./styles.css";
 
 // --- legacy global shape expected by the components --------------------------
@@ -19,6 +20,10 @@ window.RAIL = {
 window.routeColor = routeColor;
 // Back-compat alias for any leftover references in the prototype.
 window.OP_COLORS = new Proxy({}, { get: () => REGION_COLORS["North America"] });
+
+// Real-photo hero per route, sourced from Wikipedia summary thumbnails. The
+// Card/Detail components look up by route.id and fall back to <Scene/>.
+window.ROUTE_IMAGES = routeImagesDoc.images;
 
 // Store + price + formatter + hook. window.claude is provided by the Claude.ai
 // artifact runtime; outside it, preference parsing falls back to the heuristic.

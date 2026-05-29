@@ -5,6 +5,29 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+// RouteHero — replaces the SVG <Scene/> placeholder with a real photo when
+// window.ROUTE_IMAGES has an entry for this route.id. Falls back to <Scene/>
+// (defined in scenes.jsx) for any route without a fetched image.
+function RouteHero({ route, sceneType, className = "" }) {
+  const img = (typeof window !== "undefined" && window.ROUTE_IMAGES) ? window.ROUTE_IMAGES[route.id] : null;
+  if (img && img.thumbnail_url) {
+    return (
+      <img
+        className={"route-hero-img " + className}
+        src={img.original_url || img.thumbnail_url}
+        alt={img.title || route.name}
+        loading="lazy"
+        decoding="async"
+        referrerPolicy="no-referrer"
+      />
+    );
+  }
+  return <Scene type={sceneType || (route.scenes && route.scenes[0] && route.scenes[0].type)} />;
+}
+function hasRouteImage(route) {
+  return !!(typeof window !== "undefined" && window.ROUTE_IMAGES && window.ROUTE_IMAGES[route.id] && window.ROUTE_IMAGES[route.id].thumbnail_url);
+}
+
 // ============================================================
 // === tweaks-panel.jsx
 // ============================================================
@@ -1837,13 +1860,15 @@ function Detail({ route, onClose, accent, roundTrip = false, departWhen, returnW
         </button>
 
         <div className="hero">
-          <Scene type={scene.type} />
+          <RouteHero route={route} sceneType={scene.type} />
           <div className="hero-grad"></div>
-          <div className="thumbs">
-            {route.scenes.map((s, i) => (
-              <button key={i} className={i === shot ? "on" : ""} onClick={() => setShot(i)} aria-label={s.caption}><Scene type={s.type} vignette={false} /></button>
-            ))}
-          </div>
+          {!hasRouteImage(route) && (
+            <div className="thumbs">
+              {route.scenes.map((s, i) => (
+                <button key={i} className={i === shot ? "on" : ""} onClick={() => setShot(i)} aria-label={s.caption}><Scene type={s.type} vignette={false} /></button>
+              ))}
+            </div>
+          )}
           <div className="hero-info">
             <span className="opbadge" style={{ background: opColor.bg, color: opColor.fg }}><span className="opdot" style={{ background: opColor.fg }}></span>{route.operator}</span>
             <h1>{route.name}</h1>
@@ -1852,7 +1877,17 @@ function Detail({ route, onClose, accent, roundTrip = false, departWhen, returnW
         </div>
         <div className="caption">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="12" cy="12" r="3.2" /><path d="M8 5l1.5-2h5L16 5" /></svg>
-          {scene.caption} <span style={{ color: "var(--ink-faint)", fontWeight: 500 }}>· representative scenery placeholder</span>
+          {scene.caption}{" "}
+          {hasRouteImage(route) ? (
+            <span style={{ color: "var(--ink-faint)", fontWeight: 500 }}>
+              · photo via{" "}
+              <a href={window.ROUTE_IMAGES[route.id].source_page} target="_blank" rel="noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>
+                Wikipedia / Commons
+              </a>
+            </span>
+          ) : (
+            <span style={{ color: "var(--ink-faint)", fontWeight: 500 }}>· representative scenery placeholder</span>
+          )}
         </div>
 
         <div className="dsection">
@@ -1987,7 +2022,7 @@ function Card({ route, accent, onOpen, roundTrip }) {
   return (
     <div className="card" onClick={onOpen} data-screen-label={"Card: " + route.name}>
       <div className="card-photo">
-        <Scene type={route.scenes[0].type} />
+        <RouteHero route={route} />
         <span className="ribbon">{route.category}</span>
         <span className="scenic"><Ico d={<path d="M3 20l6-12 4 7 3-5 5 10z" />} size={12} sw={2.2} />{route.scenicScore} scenic</span>
       </div>
