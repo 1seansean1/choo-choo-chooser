@@ -59,6 +59,17 @@ const SLUG_OVERRIDES = {
   "al-boraq":               "Al-Boraq",
   "madaraka":               "Madaraka_Express",
   "serra-verde":            "Morretes",   // train article has no thumb; use the destination town
+  // Expansion 2026
+  "italo-rome-naples":      "AGV_575",     // the trainset Italo uses; only article with a thumb
+  "lumo-london-edinburgh":  "Lumo_(train_operating_company)",
+  "iryo-madrid-barcelona":  "Iryo",
+  "ave-madrid-barcelona":   "Madrid–Barcelona_high-speed_rail_line",
+  "ice-hamburg-munich":     "Intercity-Express",
+  "golden-pass":            "GoldenPass_Line",
+  "hayabusa-tokyo-shin-aomori": "Hayabusa_(train)",
+  "trans-mongolian":        "Trans-Mongolian_Railway",
+  "hiram-bingham":          "Belmond_Hiram_Bingham",
+  "avanti-london-glasgow":  "Avanti_West_Coast",
   "central-andino":         "Ferrocarril_Central_Andino",
 };
 

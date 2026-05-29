@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-29T01:32:40.969Z",
+  "generated_at": "2026-05-29T04:31:04.118Z",
   "source": "https://en.wikipedia.org/api/rest_v1/page/summary",
   "license_note": "Images hosted by Wikimedia Commons; individual licenses vary (mostly CC-BY-SA or public domain). Each entry's source_page links to the article where licensing is stated.",
   "images": {
@@ -517,6 +517,126 @@
       "thumbnail_height": 220,
       "original_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/FCCA_GE_C30-7_Rio_Blanco_-_San_Mateo.jpg/3840px-FCCA_GE_C30-7_Rio_Blanco_-_San_Mateo.jpg",
       "source_page": "https://en.wikipedia.org/wiki/Ferrocarril_Central_Andino",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "italo-rome-naples": {
+      "id": "italo-rome-naples",
+      "slug": "AGV_575",
+      "title": "AGV (train)",
+      "description": "High speed train model",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/AGV_Innotrans_2008.JPG/330px-AGV_Innotrans_2008.JPG",
+      "thumbnail_width": 330,
+      "thumbnail_height": 248,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/AGV_Innotrans_2008.JPG",
+      "source_page": "https://en.wikipedia.org/wiki/AGV_(train)",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "lumo-london-edinburgh": {
+      "id": "lumo-london-edinburgh",
+      "slug": "Lumo_(train_operating_company)",
+      "title": "Lumo (train operating company)",
+      "description": "",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lumo_803003_at_Edinburgh_Waverley.jpg/330px-Lumo_803003_at_Edinburgh_Waverley.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 248,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lumo_803003_at_Edinburgh_Waverley.jpg/3840px-Lumo_803003_at_Edinburgh_Waverley.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Lumo_(train_operating_company)",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "iryo-madrid-barcelona": {
+      "id": "iryo-madrid-barcelona",
+      "slug": "Iryo",
+      "title": "Iryo",
+      "description": "High-speed rail operator in Spain",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/6/61/Iryo_2022_logo.png",
+      "thumbnail_width": 300,
+      "thumbnail_height": 175,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/6/61/Iryo_2022_logo.png",
+      "source_page": "https://en.wikipedia.org/wiki/Iryo",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "ave-madrid-barcelona": {
+      "id": "ave-madrid-barcelona",
+      "slug": "Madrid–Barcelona_high-speed_rail_line",
+      "title": "Madrid–Barcelona high-speed rail line",
+      "description": "Railway line connecting Madrid and Barcelona, in Spain",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/RENFE_Class_103_Vinaixa.jpg/330px-RENFE_Class_103_Vinaixa.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 204,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/RENFE_Class_103_Vinaixa.jpg/3840px-RENFE_Class_103_Vinaixa.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Madrid%E2%80%93Barcelona_high-speed_rail_line",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "ice-hamburg-munich": {
+      "id": "ice-hamburg-munich",
+      "slug": "Intercity-Express",
+      "title": "Intercity Express",
+      "description": "German state-owned high-speed rail system",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/ICE_3_Oberhaider-Wald-Tunnel.jpg/330px-ICE_3_Oberhaider-Wald-Tunnel.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 220,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/ICE_3_Oberhaider-Wald-Tunnel.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Intercity_Express",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "golden-pass": {
+      "id": "golden-pass",
+      "slug": "GoldenPass_Line",
+      "title": "GoldenPass Line",
+      "description": "Train route in the Swiss Alps",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/PanoramicExpress.jpg/330px-PanoramicExpress.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 211,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/bf/PanoramicExpress.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/GoldenPass_Line",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "hayabusa-tokyo-shin-aomori": {
+      "id": "hayabusa-tokyo-shin-aomori",
+      "slug": "Hayabusa_(train)",
+      "title": "Hayabusa (train)",
+      "description": "Japanese high-speed Shinkansen train service",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Series-E5-U44_Hayabusa-2.jpg/330px-Series-E5-U44_Hayabusa-2.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 220,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Series-E5-U44_Hayabusa-2.jpg/3840px-Series-E5-U44_Hayabusa-2.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Hayabusa_(train)",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "trans-mongolian": {
+      "id": "trans-mongolian",
+      "slug": "Trans-Mongolian_Railway",
+      "title": "Trans-Mongolian Railway",
+      "description": "International railway line in Mongolia",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Trans_Mongolian_Train_01.jpg/330px-Trans_Mongolian_Train_01.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 219,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/8/87/Trans_Mongolian_Train_01.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Trans-Mongolian_Railway",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "hiram-bingham": {
+      "id": "hiram-bingham",
+      "slug": "Belmond_Hiram_Bingham",
+      "title": "Belmond Hiram Bingham",
+      "description": "Luxury train in Peru",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Hiram_Bingham_Perurail_-_linea_Cusco-Machu_Picchu_-_2009-01-06_-_Jorge_Lascar.jpg/330px-Hiram_Bingham_Perurail_-_linea_Cusco-Machu_Picchu_-_2009-01-06_-_Jorge_Lascar.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 219,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Hiram_Bingham_Perurail_-_linea_Cusco-Machu_Picchu_-_2009-01-06_-_Jorge_Lascar.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Belmond_Hiram_Bingham",
+      "attribution": "Wikipedia / Wikimedia Commons"
+    },
+    "avanti-london-glasgow": {
+      "id": "avanti-london-glasgow",
+      "slug": "Avanti_West_Coast",
+      "title": "Avanti West Coast",
+      "description": "British train operating company",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/390039_and_805009_at_Stafford.jpg/330px-390039_and_805009_at_Stafford.jpg",
+      "thumbnail_width": 330,
+      "thumbnail_height": 165,
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/390039_and_805009_at_Stafford.jpg",
+      "source_page": "https://en.wikipedia.org/wiki/Avanti_West_Coast",
       "attribution": "Wikipedia / Wikimedia Commons"
     }
   }

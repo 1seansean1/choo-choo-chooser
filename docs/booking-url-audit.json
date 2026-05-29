@@ -1,0 +1,413 @@
+{
+  "generated_at": "2026-05-29T04:24:15.798Z",
+  "total": 41,
+  "ok": 27,
+  "redirected": 5,
+  "bad": 9,
+  "results": [
+    {
+      "op": "Amtrak",
+      "kind": "home",
+      "url": "https://www.amtrak.com/home",
+      "status": 200,
+      "finalUrl": "https://www.amtrak.com/home",
+      "redirected": false,
+      "ms": 524,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Amtrak",
+      "kind": "search",
+      "url": "https://www.amtrak.com/tickets/departure.html",
+      "status": 200,
+      "finalUrl": "https://www.amtrak.com/tickets/departure.html",
+      "redirected": false,
+      "ms": 274,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Rocky Mountaineer",
+      "kind": "home",
+      "url": "https://www.rockymountaineer.com/",
+      "status": 403,
+      "finalUrl": "https://www.rockymountaineer.com/",
+      "redirected": false,
+      "ms": 270,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Rocky Mountaineer",
+      "kind": "search",
+      "url": "https://www.rockymountaineer.com/trains-and-routes",
+      "status": 403,
+      "finalUrl": "https://www.rockymountaineer.com/trains-and-routes",
+      "redirected": false,
+      "ms": 255,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "VIA Rail",
+      "kind": "home",
+      "url": "https://www.viarail.ca/en",
+      "status": 200,
+      "finalUrl": "https://www.viarail.ca/en",
+      "redirected": false,
+      "ms": 426,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "VIA Rail",
+      "kind": "search",
+      "url": "https://reservia.viarail.ca/?lang=en",
+      "status": 200,
+      "finalUrl": "https://reservia.viarail.ca/?lang=en",
+      "redirected": false,
+      "ms": 475,
+      "contentType": "text/html"
+    },
+    {
+      "op": "Eurostar",
+      "kind": "home",
+      "url": "https://www.eurostar.com/uk-en",
+      "status": 200,
+      "finalUrl": "https://www.eurostar.com/uk-en",
+      "redirected": false,
+      "ms": 1217,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "RhB · MGB",
+      "kind": "home",
+      "url": "https://www.glacierexpress.ch/en",
+      "status": 200,
+      "finalUrl": "https://www.glacierexpress.ch/en",
+      "redirected": false,
+      "ms": 792,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "Rhaetian Railway",
+      "kind": "home",
+      "url": "https://www.rhb.ch/en/panoramic-trains",
+      "status": 200,
+      "finalUrl": "https://www.rhb.ch/en/panoramic-trains/",
+      "redirected": true,
+      "ms": 1594,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "Trenitalia",
+      "kind": "home",
+      "url": "https://www.trenitalia.com/en.html",
+      "status": 200,
+      "finalUrl": "https://www.trenitalia.com/en.html",
+      "redirected": false,
+      "ms": 530,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Vy / Flåm",
+      "kind": "home",
+      "url": "https://www.visitflam.com/en/activities/flamsbana-the-flam-railway/",
+      "status": 429,
+      "finalUrl": "https://norwaysbest.com/en/activities/flamsbana-the-flam-railway/",
+      "redirected": true,
+      "ms": 746,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "Caledonian Sleeper",
+      "kind": "home",
+      "url": "https://www.sleeper.scot/",
+      "status": 200,
+      "finalUrl": "https://www.sleeper.scot/",
+      "redirected": false,
+      "ms": 603,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "JR Central",
+      "kind": "home",
+      "url": "https://global.jr-central.co.jp/en/",
+      "status": 200,
+      "finalUrl": "https://global.jr-central.co.jp/en/",
+      "redirected": false,
+      "ms": 442,
+      "contentType": "text/html"
+    },
+    {
+      "op": "China Railway",
+      "kind": "home",
+      "url": "https://www.chinatrainguide.com/",
+      "status": 200,
+      "finalUrl": "https://www.chinatrainguide.com/",
+      "redirected": false,
+      "ms": 684,
+      "contentType": "text/html"
+    },
+    {
+      "op": "Russian Railways",
+      "kind": "home",
+      "url": "https://www.realrussia.co.uk/",
+      "status": 403,
+      "finalUrl": "https://www.realrussia.co.uk/",
+      "redirected": false,
+      "ms": 236,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Vietnam Railways",
+      "kind": "home",
+      "url": "https://dsvn.vn/",
+      "status": 200,
+      "finalUrl": "https://dsvn.vn/",
+      "redirected": false,
+      "ms": 1751,
+      "contentType": "text/html"
+    },
+    {
+      "op": "Vietnam Railways",
+      "kind": "search",
+      "url": "https://12go.asia/en/travel/vietnam/north-to-south",
+      "status": 202,
+      "finalUrl": "https://12go.asia/en/travel/vietnam/north-to-south",
+      "redirected": false,
+      "ms": 815,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Journey Beyond",
+      "kind": "home",
+      "url": "https://www.journeybeyondrail.com.au/",
+      "status": 200,
+      "finalUrl": "https://www.journeybeyondrail.com.au/",
+      "redirected": false,
+      "ms": 387,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Journey Beyond",
+      "kind": "search",
+      "url": "https://www.journeybeyondrail.com.au/journeys/",
+      "status": 200,
+      "finalUrl": "https://www.journeybeyondrail.com.au/journeys/the-ghan/",
+      "redirected": true,
+      "ms": 2723,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "KiwiRail",
+      "kind": "home",
+      "url": "https://www.greatjourneysnz.com/",
+      "status": 200,
+      "finalUrl": "https://www.greatjourneysnz.com/",
+      "redirected": false,
+      "ms": 2246,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "KiwiRail",
+      "kind": "search",
+      "url": "https://www.greatjourneysnz.com/tranzalpine/",
+      "status": 200,
+      "finalUrl": "https://www.greatjourneysnz.com/routes/tranzalpine/",
+      "redirected": true,
+      "ms": 3594,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "Blue Train",
+      "kind": "home",
+      "url": "https://www.bluetrain.co.za/",
+      "status": 200,
+      "finalUrl": "https://validate.perfdrive.com/?ssa=d854eb40-38e9-4b95-9e1d-f81ac880989d&ssb=95727262320&ssc=https%3A%2F%2Fwww.bluetrain.co.za%2F&ssi=67cc9741-c33z-4696-96d7-39c73e13b2a8&ssk=support@shieldsquare.com&ssm=47066742192285208109720349100388&ssn=4836e22de3d4e383ed29d675383c0237c2aec73ed9b8-e0f3-4862-a3d4b0&sso=a308804a-cc11f3db8708c5861dd30c812bbecde2eb67ee93390ee210&ssp=30715469091780068672178006533546419&ssq=85698202864152754951728641112010674467066&ssr=NzEuMjM3LjEyNy4xNjE=&sst=Mozilla/5.0%20(Windows%20NT%2010.0;%20Win64;%20x64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/125%20Safari/537.36&ssu=&ssv=&ssw=&ssx=eyJ1em14IjoiN2Y5MDAwOWZiYjRjY2EtMTFjOS00ZmIxLTk2OTItOTQ3NWZmNzkxNzY1MS0xNzgwMDI4NjQxNzU4MC1jYzUyOTE4NTE3YzZmOWVhMTAiLCJfX3V6bWYiOiI3ZjkwMDBjNzNlZDliOC1lMGYzLTQ4NjItYTA0YS1jYzExZjNkYjg3MDgxLTE3ODAwMjg2NDE3NTgwLTAwMzgxNzc2MTdkOGIwMDBlZjcxMCIsInJkIjoiYmx1ZXRyYWluLmNvLnphIn0=",
+      "redirected": true,
+      "ms": 3685,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Blue Train",
+      "kind": "search",
+      "url": "https://www.bluetrain.co.za/reservations/",
+      "status": 200,
+      "finalUrl": "https://validate.perfdrive.com/?ssa=502d0301-0f95-4526-93de-9c71d99d39ef&ssb=95727262320&ssc=https%3A%2F%2Fwww.bluetrain.co.za%2Freservations%2F&ssi=44c33aa3-c33z-4490-8846-2b9f10e05264&ssk=support@shieldsquare.com&ssm=47066742192285208109720349100388&ssn=4836e22d550a444e6a31ab5e45560237c2ae170f144e-686f-4672-83d4b0&sso=a3088969-7f5d39be4588c5861dd3e4922513ac71fe6c1384390ee210&ssp=30715469091780068672178006533546419&ssq=85698202864152754951728641112010674467066&ssr=NzEuMjM3LjEyNy4xNjE=&sst=Mozilla/5.0%20(Windows%20NT%2010.0;%20Win64;%20x64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/125%20Safari/537.36&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJsdWV0cmFpbi5jby56YSIsInV6bXgiOiI3ZjkwMDAwZmExZTYxOC01ZjVhLTQzNWYtYjUwMi00ZTJlNTk0Mjk0YzYxLTE3ODAwMjg2NDE3NTcwLTE3ZTYwYmMzMjQxNWMxYjYxMCIsIl9fdXptZiI6IjdmOTAwMDE3MGYxNDRlLTY4NmYtNDY3Mi04OTY5LTdmNWQzOWJlNDU4ODEtMTc4MDAyODY0MTc1NzAtMDAzNDM2ZmRlY2MzMGRhN2IzODEwIn0=",
+      "redirected": true,
+      "ms": 3693,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "TAZARA",
+      "kind": "home",
+      "url": "https://www.tazarasite.com/",
+      "status": 200,
+      "finalUrl": "https://www.tazarasite.com/",
+      "redirected": false,
+      "ms": 2836,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "Belmond",
+      "kind": "home",
+      "url": "https://www.belmond.com/trains",
+      "status": 200,
+      "finalUrl": "https://www.belmond.com/trains",
+      "redirected": false,
+      "ms": 257,
+      "contentType": "text/html;charset=UTF-8"
+    },
+    {
+      "op": "Tren a las Nubes",
+      "kind": "home",
+      "url": "https://trenalasnubes.com.ar/inicio-es/",
+      "status": 200,
+      "finalUrl": "https://trenalasnubes.com.ar/inicio-es/",
+      "redirected": false,
+      "ms": 2076,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "Deutsche Bahn",
+      "kind": "home",
+      "url": "https://int.bahn.de/en",
+      "status": 200,
+      "finalUrl": "https://int.bahn.de/en",
+      "redirected": false,
+      "ms": 415,
+      "contentType": "text/html;charset=UTF-8"
+    },
+    {
+      "op": "SNCF",
+      "kind": "home",
+      "url": "https://www.sncf-connect.com/",
+      "status": 403,
+      "finalUrl": "https://www.sncf-connect.com/",
+      "redirected": false,
+      "ms": 376,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "op": "Renfe",
+      "kind": "home",
+      "url": "https://www.renfe.com/es/en",
+      "status": 200,
+      "finalUrl": "https://www.renfe.com/es/en",
+      "redirected": false,
+      "ms": 451,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "op": "ÖBB",
+      "kind": "home",
+      "url": "https://www.nightjet.com/en",
+      "status": 200,
+      "finalUrl": "https://www.nightjet.com/en",
+      "redirected": false,
+      "ms": 1188,
+      "contentType": "text/html;charset=UTF-8"
+    },
+    {
+      "op": "ÖBB",
+      "kind": "search",
+      "url": "https://shop.oebbtickets.at/en/ticket",
+      "status": 200,
+      "finalUrl": "https://shop.oebbtickets.at/en/ticket",
+      "redirected": false,
+      "ms": 855,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "op": "Vy",
+      "kind": "home",
+      "url": "https://www.vy.no/en",
+      "status": 403,
+      "finalUrl": "https://www.vy.no/en",
+      "redirected": false,
+      "ms": 672,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "op": "Korail",
+      "kind": "home",
+      "url": "https://www.korail.com/",
+      "status": 200,
+      "finalUrl": "https://www.korail.com/",
+      "redirected": false,
+      "ms": 1535,
+      "contentType": "text/html"
+    },
+    {
+      "op": "Indian Railways",
+      "kind": "home",
+      "url": "https://www.irctc.co.in/nget/train-search",
+      "status": 403,
+      "finalUrl": "https://www.irctc.co.in/nget/train-search",
+      "redirected": false,
+      "ms": 2159,
+      "contentType": "text/html"
+    },
+    {
+      "op": "Indian Railways",
+      "kind": "search",
+      "url": "https://12go.asia/en/india",
+      "status": 200,
+      "finalUrl": "https://12go.asia/en/india",
+      "redirected": false,
+      "ms": 1239,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "THSR",
+      "kind": "home",
+      "url": "https://en.thsrc.com.tw/",
+      "status": 200,
+      "finalUrl": "https://en.thsrc.com.tw/",
+      "redirected": false,
+      "ms": 770,
+      "contentType": "text/html"
+    },
+    {
+      "op": "Brightline",
+      "kind": "home",
+      "url": "https://www.gobrightline.com/",
+      "status": 200,
+      "finalUrl": "https://www.gobrightline.com/",
+      "redirected": false,
+      "ms": 1034,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "op": "ONCF",
+      "kind": "home",
+      "url": "https://www.oncf.ma/",
+      "error": "fetch failed",
+      "ms": 10483
+    },
+    {
+      "op": "Kenya Railways",
+      "kind": "home",
+      "url": "https://metickets.krc.co.ke/",
+      "error": "fetch failed",
+      "ms": 3019
+    },
+    {
+      "op": "Serra Verde",
+      "kind": "home",
+      "url": "https://serraverdeexpress.com.br/",
+      "status": 200,
+      "finalUrl": "https://serraverdeexpress.com.br/",
+      "redirected": false,
+      "ms": 1148,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "op": "FCCA",
+      "kind": "home",
+      "url": "https://www.ferrocarrilcentral.com.pe/",
+      "status": 200,
+      "finalUrl": "https://www.ferrocarrilcentral.com.pe/",
+      "redirected": false,
+      "ms": 561,
+      "contentType": "text/html; charset=UTF-8"
+    }
+  ]
+}

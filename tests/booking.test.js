@@ -19,7 +19,7 @@ describe("bookingUrl", () => {
     expect(url).toContain("https://www.awin1.com/cread.php");
     expect(url).toContain("awinmid=5707");
     expect(url).toContain("awinaffid=12345");
-    expect(url).toContain("ued=https%3A%2F%2Fbooking.eurostar.com");
+    expect(url).toContain("ued=https%3A%2F%2Fwww.eurostar.com");
   });
 
   it("wraps CJ links when affiliateId + advertiserId are present", () => {
