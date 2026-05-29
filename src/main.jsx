@@ -6,7 +6,9 @@ import ReactDOM from "react-dom/client";
 
 import { AM, REGIONS, REGION_COLORS, routeColor, ROUTES } from "./data/index.js";
 import { createStore, makeUseStore, CCCPrice, money } from "./lib/store.js";
+import { bookingUrl, bookingLabel, tipJarUrl, isAffiliateMonetized } from "./lib/booking.js";
 import routeImagesDoc from "./data/route-images.json";
+import affiliateConfig from "./data/affiliate-links.json";
 import "./styles.css";
 
 // --- legacy global shape expected by the components --------------------------
@@ -24,6 +26,15 @@ window.OP_COLORS = new Proxy({}, { get: () => REGION_COLORS["North America"] });
 // Real-photo hero per route, sourced from Wikipedia summary thumbnails. The
 // Card/Detail components look up by route.id and fall back to <Scene/>.
 window.ROUTE_IMAGES = routeImagesDoc.images;
+
+// Affiliate-network config. The frontend reads this to build outbound booking
+// links; if affiliateIds are populated, links wrap through the named network
+// so the operator pays commission on completed bookings.
+window.AFFILIATE_CONFIG = affiliateConfig;
+window.bookingUrl   = (route) => bookingUrl(route, affiliateConfig);
+window.bookingLabel = (route) => bookingLabel(route, affiliateConfig);
+window.tipJarUrl    = () => tipJarUrl(affiliateConfig);
+window.isAffiliateMonetized = (operator) => isAffiliateMonetized(operator, affiliateConfig);
 
 // Stripe Checkout backend wiring. Set at build time via VITE_CHECKOUT_API_URL:
 //   unset / "" -> mock fallback (portfolio mode, no real backend)

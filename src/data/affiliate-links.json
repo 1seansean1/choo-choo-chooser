@@ -1,0 +1,51 @@
+{
+  "_doc": {
+    "note": "Per-operator booking targets + affiliate-network wrapping. The frontend resolves a route -> URL via src/lib/booking.js (bookingUrl). When affiliateId is empty, we deep-link directly to the operator (no commission). When affiliateId is filled, we wrap through the named network so the operator pays a commission on the resulting booking.",
+    "how_to_enable_affiliate": "1) Sign up for the network (awin.com, travelpayouts.com, cj.com). 2) Apply to the named program. 3) Once approved, copy your publisher/affiliate ID into the 'affiliateId' field for each operator listed under that network. 4) git push -> redeploy auto-picks them up.",
+    "networks_supported": ["direct", "awin", "cj", "travelpayouts"]
+  },
+  "operators": {
+    "Amtrak":              { "home": "https://www.amtrak.com/home",                                    "search": "https://www.amtrak.com/tickets/departure.html",                "network": "cj",            "advertiserId": "9929080", "affiliateId": "" },
+    "Rocky Mountaineer":   { "home": "https://www.rockymountaineer.com/",                              "search": "https://www.rockymountaineer.com/trains-and-routes",            "network": "direct",                                "affiliateId": "" },
+    "VIA Rail":            { "home": "https://www.viarail.ca/en",                                      "search": "https://reservia.viarail.ca/?lang=en",                          "network": "direct",                                "affiliateId": "" },
+    "Eurostar":            { "home": "https://www.eurostar.com/",                                      "search": "https://booking.eurostar.com/uk-en/book/journey",               "network": "awin",          "merchantId": "5707",      "affiliateId": "" },
+    "RhB · MGB":           { "home": "https://www.glacierexpress.ch/en",                               "search": "https://www.glacierexpress.ch/en/tickets",                      "network": "direct",                                "affiliateId": "" },
+    "Rhaetian Railway":    { "home": "https://www.rhb.ch/en/panoramic-trains/bernina-express",         "search": "https://www.rhb.ch/en/tickets",                                 "network": "direct",                                "affiliateId": "" },
+    "Trenitalia":          { "home": "https://www.trenitalia.com/en.html",                             "search": "https://www.trenitalia.com/en.html",                            "network": "awin",          "merchantId": "20830",     "affiliateId": "" },
+    "Vy / Flåm":           { "home": "https://www.visitflam.com/en/activities/flamsbana-the-flam-railway/", "search": "https://www.visitflam.com/en/activities/flamsbana-the-flam-railway/", "network": "direct",                          "affiliateId": "" },
+    "Caledonian Sleeper":  { "home": "https://www.sleeper.scot/",                                      "search": "https://www.sleeper.scot/journey/journey-planner/",             "network": "direct",                                "affiliateId": "" },
+    "JR Central":          { "home": "https://global.jr-central.co.jp/en/",                            "search": "https://shinkansen-smartex.com/inbounds/",                      "network": "travelpayouts", "merchantId": "klook",     "affiliateId": "" },
+    "China Railway":       { "home": "https://www.chinatrainguide.com/",                               "search": "https://www.chinatrainguide.com/",                              "network": "travelpayouts", "merchantId": "trip",      "affiliateId": "" },
+    "Russian Railways":    { "home": "https://pass.rzd.ru/main-pass/public/en",                        "search": "https://pass.rzd.ru/main-pass/public/en",                       "network": "direct",                                "affiliateId": "" },
+    "Vietnam Railways":    { "home": "https://dsvn.vn/",                                               "search": "https://12go.asia/en/travel/vietnam/north-to-south",             "network": "travelpayouts", "merchantId": "12go",      "affiliateId": "" },
+    "Journey Beyond":      { "home": "https://www.journeybeyondrail.com.au/",                          "search": "https://www.journeybeyondrail.com.au/journeys/",                "network": "direct",                                "affiliateId": "" },
+    "KiwiRail":            { "home": "https://www.greatjourneysnz.com/",                               "search": "https://www.greatjourneysnz.com/tranzalpine/",                  "network": "direct",                                "affiliateId": "" },
+    "Blue Train":          { "home": "https://www.bluetrain.co.za/",                                   "search": "https://www.bluetrain.co.za/reservations/",                     "network": "direct",                                "affiliateId": "" },
+    "TAZARA":              { "home": "https://www.tazarasite.com/",                                    "search": "https://www.tazarasite.com/",                                   "network": "direct",                                "affiliateId": "" },
+    "Belmond":             { "home": "https://www.belmond.com/trains",                                 "search": "https://www.belmond.com/trains",                                "network": "awin",          "merchantId": "12086",     "affiliateId": "" },
+    "Tren a las Nubes":    { "home": "https://www.trenalasnubes.com.ar/",                              "search": "https://www.trenalasnubes.com.ar/tarifas-y-reservas/",          "network": "direct",                                "affiliateId": "" },
+    "Deutsche Bahn":       { "home": "https://www.bahn.de/en",                                         "search": "https://www.bahn.de/en",                                        "network": "awin",          "merchantId": "16175",     "affiliateId": "" },
+    "SNCF":                { "home": "https://www.sncf-connect.com/en-en/",                            "search": "https://www.sncf-connect.com/en-en/",                           "network": "awin",          "merchantId": "20831",     "affiliateId": "" },
+    "Renfe":               { "home": "https://www.renfe.com/es/en",                                    "search": "https://www.renfe.com/es/en",                                   "network": "direct",                                "affiliateId": "" },
+    "ÖBB":                 { "home": "https://www.nightjet.com/en",                                    "search": "https://shop.oebbtickets.at/en/ticket",                         "network": "direct",                                "affiliateId": "" },
+    "Vy":                  { "home": "https://www.vy.no/en",                                           "search": "https://www.vy.no/en",                                          "network": "direct",                                "affiliateId": "" },
+    "Korail":              { "home": "https://www.letskorail.com/ebizbf/EbizBfTicketSearch.do",        "search": "https://www.letskorail.com/ebizbf/EbizBfTicketSearch.do",       "network": "travelpayouts", "merchantId": "klook",     "affiliateId": "" },
+    "Indian Railways":     { "home": "https://www.irctc.co.in/nget/train-search",                      "search": "https://12go.asia/en/india",                                    "network": "travelpayouts", "merchantId": "12go",      "affiliateId": "" },
+    "THSR":                { "home": "https://www.thsrc.com.tw/en/",                                   "search": "https://en.thsrc.com.tw/tw/Booking/BookingS1",                  "network": "travelpayouts", "merchantId": "klook",     "affiliateId": "" },
+    "Brightline":          { "home": "https://www.gobrightline.com/",                                  "search": "https://www.gobrightline.com/train-schedule",                   "network": "direct",                                "affiliateId": "" },
+    "ONCF":                { "home": "https://www.oncf-voyages.ma/en/",                                "search": "https://www.oncf-voyages.ma/en/",                               "network": "direct",                                "affiliateId": "" },
+    "Kenya Railways":      { "home": "https://metickets.krc.co.ke/",                                   "search": "https://metickets.krc.co.ke/",                                  "network": "direct",                                "affiliateId": "" },
+    "Serra Verde":         { "home": "https://serraverdeexpress.com.br/",                              "search": "https://serraverdeexpress.com.br/passagens/",                   "network": "direct",                                "affiliateId": "" },
+    "FCCA":                { "home": "https://ferrocarrilcentral.com.pe/",                             "search": "https://ferrocarrilcentral.com.pe/tour-macho/",                 "network": "direct",                                "affiliateId": "" }
+  },
+  "networks": {
+    "direct":        { "wrap": false,  "note": "No commission. Plain deep link." },
+    "awin":          { "wrap": true,   "template": "https://www.awin1.com/cread.php?awinmid={merchantId}&awinaffid={affiliateId}&ued={target}", "note": "Awin requires merchantId per operator + your single publisher (affiliateId). Sign up at awin.com." },
+    "cj":            { "wrap": true,   "template": "https://www.anrdoezrs.net/click-{affiliateId}-{advertiserId}?url={target}", "note": "Commission Junction (CJ Affiliate) requires advertiserId per operator + your publisher (affiliateId). Sign up at cj.com." },
+    "travelpayouts": { "wrap": true,   "template": "https://tp.media/r?marker={affiliateId}&trs=&p={merchantId}&u={target}", "note": "Travelpayouts wraps Klook, 12Go, Trip.com etc. Single account, multiple merchants. Sign up at travelpayouts.com." }
+  },
+  "tipJar": {
+    "stripePaymentLinkUrl": "",
+    "note": "Optional Stripe Payment Link URL for a 'Tip the developer' button. Create one at https://dashboard.stripe.com/payment-links (works in test or live mode; for live a small tip is unambiguously legitimate). Leave empty to hide the tip jar."
+  }
+}

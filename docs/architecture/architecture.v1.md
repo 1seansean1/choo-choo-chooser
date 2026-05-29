@@ -120,23 +120,81 @@ server-side from `ROUTES[routeId].classes[classIdx].price`, so the worst a
 client can do is order a different real product. Quantities are clamped
 (1≤adults≤8, 0≤kids≤8, ≤12 items per cart).
 
-## Live-mode reality check
+## Affiliate model (added 2026-05-29, supersedes the MoR Stripe path for bookings)
 
-The integration runs in Stripe test mode (`sk_test_...`). Flipping the
-`STRIPE_SECRET_KEY` env var on Vercel to `sk_live_...` would route real money
-to the connected bank account — and would also make every transaction
-fraudulent, because the app has no actual ticket inventory. The fake
-confirmation codes the demo issues are not bookings. Flipping to live mode
-requires upstream rail-aggregator integration first:
+Rather than become a merchant-of-record (months of contracts + KYC + per-
+country tax + inventory partnerships), the live revenue model is **affiliate
+out-link**: the "Continue on [Operator]" button on every route opens the
+operator's own booking site (Amtrak.com, Eurostar.com, Trenitalia.com, JR
+Central, …). The customer buys directly from the operator. The operator
+delivers a real ticket and pays us a small commission (~3-8%) via an
+affiliate network.
+
+```
+src/data/affiliate-links.json   per-operator URL + network + affiliateId slot
+src/lib/booking.js              bookingUrl(route, config) resolver
+  - direct                       no commission, plain deep link
+  - awin                         wraps via awin1.com/cread.php
+  - cj                           wraps via anrdoezrs.net/click-...
+  - travelpayouts                wraps via tp.media/r
+src/main.jsx                    bridges window.bookingUrl(route)
+src/all.jsx                     all Buy buttons resolve to bookingUrl()
+                                Cart "Continue on Operator ↗" opens new tab per leg
+                                Detail "Continue on Operator ↗" replaces "Book now"
+                                Planner onBook opens one tab per leg
+                                AffiliateDisclosureFooter   persistent FTC disclosure
+                                "How it works" modal        explains the model
+```
+
+Every outbound link carries `rel="noopener noreferrer sponsored"` per FTC
+guidance and the networks' terms.
+
+**Status table (operator → network → monetized?):**
+
+| operator              | network        | merchantId   | monetized? |
+|---|---|---|---|
+| Amtrak                | CJ             | 9929080      | once affiliateId set |
+| Eurostar              | Awin           | 5707         | once affiliateId set |
+| Trenitalia            | Awin           | 20830        | once affiliateId set |
+| SNCF                  | Awin           | 20831        | once affiliateId set |
+| Deutsche Bahn         | Awin           | 16175        | once affiliateId set |
+| Belmond               | Awin           | 12086        | once affiliateId set |
+| JR Central, Korail, THSR | Travelpayouts | klook       | once affiliateId set |
+| China Railway         | Travelpayouts  | trip         | once affiliateId set |
+| Vietnam Rys, Indian Rys | Travelpayouts | 12go        | once affiliateId set |
+| Rocky Mountaineer, VIA Rail, RhB/MGB, Vy, Caledonian Sleeper, KiwiRail, Blue Train, TAZARA, Tren a las Nubes, Renfe, ÖBB, Russian Rys, Brightline, ONCF, Kenya Rys, Serra Verde, FCCA | direct | — | direct deep-link (no commission) |
+
+For the "direct" rows, monetization needs either (a) a direct affiliate program
+with that operator, or (b) routing through a multi-modal aggregator like
+GetYourGuide / Omio that does cover them. Future iteration.
+
+## Stripe Checkout — kept, repurposed
+
+The `api/checkout.js` + `api/session/[id].js` endpoints from the prior
+iteration are still wired (test mode) but no UI path triggers them in the
+default flow. Two retained uses:
+
+- **Tip jar** — `affiliate-links.json::tipJar.stripePaymentLinkUrl` can hold a
+  Stripe Payment Link URL for a "tip the developer" button (live-mode-safe
+  because there's no fulfillment promise).
+- **Future first-party premium** — if a future feature is genuinely
+  deliverable digitally (e.g. a "Pro" rail-nerd account with saved itineraries,
+  PDF exports), the existing infrastructure is ready.
+
+## Live-mode rail booking (not a current path; kept for context)
+
+To genuinely sell train tickets and route real money for them, we'd need
+either operator-direct contracts or an aggregator:
 
 - **Rail Europe Connect** — most European operators, merchant-of-record
 - **Silverrail / SilverCore** — global aggregator, B2B API
-- **Direct with Amtrak** — US-only, partner channel
-- **Trainline Partner API** — UK-led
+- **Sabre Rail / Amadeus Rail / Travelport** — GDS-style integration
+- **Direct with Amtrak partner program** — US-only
 
-Each is a contracted relationship (revenue share, weeks-to-months to onboard).
-Until then, this remains a portfolio piece with a real payment integration
-demonstrated in sandbox.
+Each is a contracted relationship (weeks to months, financial guarantees,
+sometimes IATA-grade accreditation). The affiliate pivot avoids all of this
+while still earning real revenue per booking — at the cost of a smaller per-
+booking margin and one extra click for the customer.
 
 ## Risk register (forward)
 

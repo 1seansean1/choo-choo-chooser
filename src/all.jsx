@@ -28,6 +28,56 @@ function hasRouteImage(route) {
   return !!(typeof window !== "undefined" && window.ROUTE_IMAGES && window.ROUTE_IMAGES[route.id] && window.ROUTE_IMAGES[route.id].thumbnail_url);
 }
 
+// Persistent affiliate disclosure. Required by the FTC for any site that earns
+// commission on outbound links; also required by Awin / CJ / Travelpayouts
+// network terms.
+function AffiliateDisclosureFooter() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <div style={{
+        position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 5,
+        background: "var(--surface)", borderTop: "1px solid var(--line)",
+        padding: "8px 18px", fontSize: 11.5, color: "var(--ink-faint)",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        pointerEvents: "auto",
+      }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        Choo Choo Chooser is a search-and-compare tool. We don't sell tickets — we link to operators. We may earn a commission on bookings.
+        <button onClick={() => setOpen(true)} style={{
+          background: "none", border: "none", color: "var(--pine)",
+          textDecoration: "underline", cursor: "pointer", fontSize: 11.5, padding: 0,
+        }}>How it works</button>
+      </div>
+      {open && (
+        <div className="scrim" onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }} style={{zIndex: 99}}>
+          <div style={{
+            maxWidth: 560, margin: "8vh auto 0", background: "var(--surface)",
+            borderRadius: "var(--r-lg)", padding: "26px 28px", boxShadow: "var(--shadow-lg)",
+            lineHeight: 1.55,
+          }}>
+            <h2 style={{fontFamily: "var(--serif)", fontSize: 26, margin: "0 0 12px"}}>How Choo Choo Chooser works</h2>
+            <p>We're a search-and-compare site for passenger rail worldwide. We don't sell tickets — that would require us to be a licensed travel reseller for every operator (months of contracts, per-country sales-tax registration, IATA-grade accreditation). What we do instead:</p>
+            <ul>
+              <li><strong>Discover:</strong> filter, sort, and compare ~43 named train routes on six continents — scenic scores, elevation profiles, prices, amenities.</li>
+              <li><strong>Plan:</strong> save legs to a trip; the planner suggests routes for multi-stop itineraries.</li>
+              <li><strong>Book:</strong> the "Continue on [Operator]" button opens the operator's own site (Amtrak, Eurostar, Trenitalia, JR Central, …) in a new tab. You buy directly from them; you get a real ticket; they're the merchant of record.</li>
+            </ul>
+            <p>We may earn a small commission (~3-8%) on bookings made via our outbound links, through affiliate networks Awin, CJ, and Travelpayouts. Your price isn't affected. <a href="https://en.wikipedia.org/wiki/Affiliate_marketing" target="_blank" rel="noreferrer" style={{color: "var(--pine)"}}>Affiliate marketing</a> is how most travel comparison sites stay free.</p>
+            <p style={{fontSize: 13, color: "var(--ink-soft)"}}>Prices in our cards are illustrative starting fares — the operator's real price at booking is canonical. Schedules and seat availability are static placeholders here; the operator's live system is canonical for those too.</p>
+            <div style={{marginTop: 18, textAlign: "right"}}>
+              <button onClick={() => setOpen(false)} style={{
+                background: "var(--pine)", color: "#fff", border: "none",
+                padding: "9px 18px", borderRadius: 8, fontWeight: 700, cursor: "pointer",
+              }}>Got it</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 // ============================================================
 // === tweaks-panel.jsx
 // ============================================================
@@ -1258,11 +1308,24 @@ function CartDrawer() {
               })}
             </div>
             <div className="cart-foot">
-              <div className="cart-line"><span>Subtotal</span><span className="mono">{window.money(totals.subtotal)}</span></div>
-              <div className="cart-line"><span>Service fee (5%)</span><span className="mono">{window.money(totals.fee)}</span></div>
-              <div className="cart-line total"><span>Total</span><span className="mono">{window.money(totals.total)}</span></div>
-              <button className="cart-checkout" onClick={() => s.openCheckout(cart.map(c => ({ ...c })), { fromCart: true })}>Checkout · {window.money(totals.total)}</button>
-              <button className="cart-clear" onClick={() => s.clearCart()}>Clear cart</button>
+              <div className="cart-line"><span>Est. total{cart.length > 1 ? " · across " + cart.length + " legs" : ""}</span><span className="mono">{window.money(totals.subtotal)}</span></div>
+              <div className="cart-line" style={{fontSize: 11.5, color: "var(--ink-faint)", marginTop: 4}}>You'll book each leg on the operator's own site. We may earn a commission.</div>
+              <button
+                className="cart-checkout"
+                onClick={() => {
+                  let openedAny = false;
+                  cart.forEach((c) => {
+                    const route = (window.RAIL && window.RAIL.routes.find((r) => r.id === c.routeId)) || c.route;
+                    const url = route && window.bookingUrl && window.bookingUrl(route);
+                    if (url) { window.open(url, "_blank", "noopener,noreferrer"); openedAny = true; }
+                  });
+                  if (!openedAny) window.Store.toast("No bookable routes in this trip");
+                  else if (cart.length > 1) window.Store.toast("Opened " + cart.length + " operator tabs");
+                }}
+              >
+                {cart.length === 1 ? ("Continue on " + (cart[0].operator || "operator") + " ↗") : ("Open " + cart.length + " operator tabs ↗")}
+              </button>
+              <button className="cart-clear" onClick={() => s.clearCart()}>Clear trip</button>
             </div>
           </>
         )}
@@ -1955,7 +2018,14 @@ function Detail({ route, onClose, accent, roundTrip = false, departWhen, returnW
     returnDate: returnWhen && returnWhen.date, returnTime: returnWhen && returnWhen.time,
   });
   const addToCart = (classIdx) => window.Store.addToCart(mkItem(classIdx));
-  const buyNow = (classIdx) => window.Store.openCheckout([mkItem(classIdx)], { editable: true });
+  const buyNow = (classIdx) => {
+    const url = window.bookingUrl && window.bookingUrl(route);
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else {
+      window.Store.openCheckout([mkItem(classIdx)], { editable: true });
+    }
+  };
 
   const scene = route.scenes[shot] || route.scenes[0];
   const opColor = window.routeColor(route);
@@ -2065,10 +2135,25 @@ function Detail({ route, onClose, accent, roundTrip = false, departWhen, returnW
           </div>
         </div>
 
+        <div style={{padding: "0 24px 6px", fontSize: 11.5, color: "var(--ink-faint)", display: "flex", alignItems: "center", gap: 6}}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M14 4h6v6M20 4l-8 8"/></svg>
+          Booking happens on {route.operator}'s site. Prices, availability, and fees are theirs. We may earn a commission.
+        </div>
         <div className="bookbar">
           <div className="bb-price">{roundTrip ? "Round trip from" : "Fares from"}<strong>${commas(roundTrip ? Math.round(route.priceFrom * 2 * 0.9) : route.priceFrom)}</strong></div>
-          <button className="bb-add" onClick={() => addToCart(0)}><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M2 3h3l2.5 13h11l2.5-9H6" /></svg>Add to cart</button>
-          <button className="bb-cta" onClick={() => buyNow(0)}>{roundTrip ? "Book round trip" : "Book now"}</button>
+          <button className="bb-add" onClick={() => addToCart(0)}><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M2 3h3l2.5 13h11l2.5-9H6" /></svg>Save to trip</button>
+          {(() => {
+            const url = window.bookingUrl && window.bookingUrl(route);
+            const label = window.bookingLabel ? window.bookingLabel(route) : ("Book on " + route.operator);
+            return url ? (
+              <a className="bb-cta" href={url} target="_blank" rel="noopener noreferrer sponsored" style={{textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8}}>
+                {label}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 4h6v6M20 4l-8 8M10 4H4v16h16v-6"/></svg>
+              </a>
+            ) : (
+              <button className="bb-cta" onClick={() => buyNow(0)}>{roundTrip ? "Book round trip" : "Book now"}</button>
+            );
+          })()}
         </div>
       </div>
     </div>
@@ -2604,7 +2689,15 @@ function App() {
           </div>
 
           {tripMode === "multi" ? (
-            <Planner stops={stops} all={all} legSel={legSel} setLegSel={setLegSel} onOpen={setOpen} onBook={(legs) => window.Store.openCheckout(legs.map(l => ({ routeId: l.route.id, name: l.route.name, region: l.route.region, operator: l.route.operator, origin: l.route.origin, destination: l.route.destination, classIdx: l.classIdx, className: l.route.classes[l.classIdx].name, roundTrip: false, adults: 1, kids: 0, date: departWhen.date, time: departWhen.time })), { fromCart: false })} />
+            <Planner stops={stops} all={all} legSel={legSel} setLegSel={setLegSel} onOpen={setOpen} onBook={(legs) => {
+              let openedAny = false;
+              legs.forEach((l) => {
+                const url = window.bookingUrl && window.bookingUrl(l.route);
+                if (url) { window.open(url, "_blank", "noopener,noreferrer"); openedAny = true; }
+              });
+              if (openedAny && legs.length > 1) window.Store.toast("Opened " + legs.length + " operator tabs");
+              else if (!openedAny) window.Store.toast("No bookable legs in this plan");
+            }} />
           ) : filtered.length === 0 ? (
             <div className="empty"><span className="serif">No trains match.</span>Try widening your price range or clearing filters.</div>
           ) : layout === "map" ? (
@@ -2636,6 +2729,7 @@ function App() {
       <AuthModal />
       <CheckoutHost />
       <Toast />
+      <AffiliateDisclosureFooter />
 
       <TweaksPanel>
         <TweakSection label="Theme" />

@@ -38,13 +38,23 @@ npm run preview       # serve the built artifact at http://localhost:4173
 
 **Mirror deployment — GitHub Pages** at https://1seansean1.github.io/choo-choo-chooser via `.github/workflows/deploy.yml`. The Pages mirror runs in mock-checkout mode (no `VITE_CHECKOUT_API_URL`), so the cart and UX work but the "Pay" button issues fake confirmation codes. The Vercel deploy is the real one.
 
-## Payments (Stripe Checkout, test mode)
+## Bookings (affiliate)
 
-The cart's "Pay" button posts to `/api/checkout`, which uses the bundled catalog to recompute prices server-side (the client cannot influence `unit_amount`) and creates a real [Stripe Checkout Session](https://stripe.com/docs/payments/checkout). The browser is redirected to Stripe's hosted page, the customer enters their card, Stripe charges and redirects back to `/?session_id=cs_test_...`, the app fetches `/api/session/:id`, and renders the confirmation panel with the real Stripe session id + amount + `livemode` flag.
+We don't sell tickets — we'd need to become a licensed travel reseller for every operator. Instead, the **"Continue on [Operator]"** button on each route opens the operator's own booking site (Amtrak.com, Eurostar.com, Trenitalia.com, JR Central, …) in a new tab. The customer buys directly from the operator. The operator delivers a real ticket. They're the merchant of record.
 
-To test on the live site: add anything to the cart, check out, enter any email, click **Pay**, then on Stripe's page use card `4242 4242 4242 4242`, any future expiry, any CVC. The dashboard at https://dashboard.stripe.com/test/payments shows the (test-mode, no-real-money) charge.
+When you sign up for affiliate networks (Awin, CJ, Travelpayouts) and drop your publisher IDs into `src/data/affiliate-links.json`, the outbound links wrap through the network so operators pay you a commission (~3-8%) on completed bookings. Until you do, the buttons still work — they just link directly without earning anything.
 
-**To flip to live mode:** rotate the Vercel env var `STRIPE_SECRET_KEY` to `sk_live_...`. **Do not flip to live without an actual ticket inventory** — without real fulfillment, every charge is "services not provided" the moment the train departs without the buyer aboard. See `docs/architecture/architecture.v1.md` for the rail-aggregator paths that make live mode legal.
+**To enable affiliate revenue:**
+
+1. **Awin** ([awin.com](https://www.awin.com/gb/affiliates)) — covers Eurostar, Trenitalia, SNCF, Deutsche Bahn, Belmond. Free signup, 1-2 day approval per merchant.
+2. **CJ Affiliate** ([cj.com](https://www.cj.com/)) — covers Amtrak (advertiserId `9929080`). Free signup, can take ~1 week.
+3. **Travelpayouts** ([travelpayouts.com](https://www.travelpayouts.com/)) — wraps Klook, 12Go, Trip.com (covers Asian rail: JR Central, China Railway, Vietnam Railways, KTX, Indian Railways, THSR). Single account, multiple merchants.
+
+Once approved, edit `src/data/affiliate-links.json`: paste your publisher ID into each operator's `affiliateId` field, commit, push. Vercel auto-redeploys. Commissions land in the network's payout to your bank.
+
+## Stripe (kept, but optional)
+
+The Stripe Checkout backend at `api/checkout.js` is still wired (test mode), and the `tipJar.stripePaymentLinkUrl` field in `affiliate-links.json` can hold a [Stripe Payment Link](https://dashboard.stripe.com/payment-links) for a future "tip the developer" button. Live mode (`sk_live_...`) is appropriate for tips (you're not promising fulfillment of anything), but **not** for ticket-style charges without rail-operator inventory contracts.
 
 ## Layout
 
