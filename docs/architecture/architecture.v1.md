@@ -80,6 +80,64 @@ src/main-mapviewer.jsx        mapviewer entry
 
 **Deploy.** GitHub Pages from `dist/` via `gh-pages` npm package OR a GH Actions workflow using `peaceiris/actions-gh-pages`. Per memory: personal apps land in `1seansean1` org. **Decision deferred to the deploy step** (workflow vs. one-shot CLI publish).
 
+## Payments (added 2026-05-28)
+
+A real Stripe-Checkout backend was added after the initial release-gate PASS. Layout:
+
+```
+api/checkout.js          Vercel serverless function. POST { items, email } →
+                         creates a Stripe Checkout Session with line items
+                         recomputed from the bundled catalog (server-trusted).
+                         Returns { url, session_id }.
+api/session/[id].js      GET → proxies a Stripe Checkout Session by id so the
+                         return page can confirm payment_status="paid" without
+                         exposing the secret key.
+api/_lib/catalog.js      Re-exports ROUTES + pricing constants from src/ so
+                         the Vercel build inlines them into the function bundle.
+vercel.json              Build/output config. /api/* auto-detected as Node funcs.
+```
+
+Frontend wiring (in `src/all.jsx` Checkout component):
+- `pay()` posts the cart payload to `/api/checkout`, persists a snapshot to
+  `sessionStorage["ccc_pending_checkout"]`, then `window.location.assign(url)`.
+- App's mount-time useEffect detects `?session_id=cs_test_...`, fetches
+  `/api/session/:id`, opens Checkout pre-positioned at step 3 with the real
+  Stripe session details, clears cart, removes the URL param.
+- Falls back to the original mock confirmation flow when `VITE_CHECKOUT_API_URL`
+  is unset (e.g. the GitHub Pages mirror).
+
+**Why Vercel, not Cloudflare Workers?** Wrangler's OAuth login uses a localhost
+HTTP callback that gets silently dropped by Windows Defender Firewall on this
+machine (same root cause as the broken git-credential-manager issue noted in
+memory). Vercel CLI uses a device-code OAuth flow that doesn't depend on a
+local listener, so login completed cleanly. Vercel also hosts the frontend at
+the same origin as the API, which eliminates the CORS allowlist that the
+Worker path needed.
+
+**Trust boundary.** The frontend can be tampered to send arbitrary `routeId`
++ `classIdx` + `roundTrip` + passenger counts, but `unit_amount` is recomputed
+server-side from `ROUTES[routeId].classes[classIdx].price`, so the worst a
+client can do is order a different real product. Quantities are clamped
+(1≤adults≤8, 0≤kids≤8, ≤12 items per cart).
+
+## Live-mode reality check
+
+The integration runs in Stripe test mode (`sk_test_...`). Flipping the
+`STRIPE_SECRET_KEY` env var on Vercel to `sk_live_...` would route real money
+to the connected bank account — and would also make every transaction
+fraudulent, because the app has no actual ticket inventory. The fake
+confirmation codes the demo issues are not bookings. Flipping to live mode
+requires upstream rail-aggregator integration first:
+
+- **Rail Europe Connect** — most European operators, merchant-of-record
+- **Silverrail / SilverCore** — global aggregator, B2B API
+- **Direct with Amtrak** — US-only, partner channel
+- **Trainline Partner API** — UK-led
+
+Each is a contracted relationship (revenue share, weeks-to-months to onboard).
+Until then, this remains a portfolio piece with a real payment integration
+demonstrated in sandbox.
+
 ## Risk register (forward)
 
 | risk | likelihood | impact | mitigation |

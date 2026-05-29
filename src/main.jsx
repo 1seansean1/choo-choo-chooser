@@ -25,17 +25,38 @@ window.OP_COLORS = new Proxy({}, { get: () => REGION_COLORS["North America"] });
 // Card/Detail components look up by route.id and fall back to <Scene/>.
 window.ROUTE_IMAGES = routeImagesDoc.images;
 
-// Stripe Checkout backend URL. Set at build time via VITE_CHECKOUT_API_URL.
-// When present, the Checkout component redirects to a real Stripe-hosted page;
-// when absent, it falls back to the prototype's mock confirmation flow.
-window.CHECKOUT_API_URL = import.meta.env.VITE_CHECKOUT_API_URL || "";
+// Stripe Checkout backend wiring. Set at build time via VITE_CHECKOUT_API_URL:
+//   unset / "" -> mock fallback (portfolio mode, no real backend)
+//   "self" / "/" -> same-origin (Vercel deploy with /api routes)
+//   "https://...workers.dev" -> cross-origin (Cloudflare Worker deploy)
+{
+  const raw = (import.meta.env.VITE_CHECKOUT_API_URL || "").trim();
+  if (raw === "" || raw === "mock") {
+    window.CHECKOUT_API_URL = "";
+    window.CHECKOUT_API_ENABLED = false;
+  } else if (raw === "self" || raw === "/") {
+    window.CHECKOUT_API_URL = "";    // relative -> same-origin /api/checkout
+    window.CHECKOUT_API_ENABLED = true;
+  } else {
+    window.CHECKOUT_API_URL = raw.replace(/\/$/, "");
+    window.CHECKOUT_API_ENABLED = true;
+  }
+}
 
 // Store + price + formatter + hook. window.claude is provided by the Claude.ai
 // artifact runtime; outside it, preference parsing falls back to the heuristic.
 const store = createStore(ROUTES, REGIONS, typeof window !== "undefined" ? window.claude : null);
 window.Store    = store;
 window.useStore = makeUseStore(store);
-window.CCCPrice = CCCPrice;
+// CCCPrice is exported as pure functions that take (items, routes); the legacy
+// callsites in cart.jsx/checkout.jsx/detail.jsx invoke them without `routes`,
+// so we bind ROUTES here.
+window.CCCPrice = {
+  itemPrice:  (it)    => CCCPrice.itemPrice(it, ROUTES),
+  cartTotals: (items) => CCCPrice.cartTotals(items, ROUTES),
+  legBase:    CCCPrice.legBase,
+  routeById:  (id)    => CCCPrice.routeById(ROUTES, id),
+};
 window.money    = money;
 
 // --- load the components (defines App + sibling components in module scope) --

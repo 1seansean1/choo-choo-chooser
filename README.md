@@ -31,7 +31,20 @@ npm run build         # writes dist/
 npm run preview       # serve the built artifact at http://localhost:4173
 ```
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and publishes `dist/` to GitHub Pages.
+**Primary deployment — Vercel** at https://choo-choo-chooser.vercel.app. Vercel hosts both the static frontend (from `dist/`) and the `api/` serverless functions on one domain. Configured via `vercel.json`. Required env vars on the Vercel project (`vercel env add ...`):
+
+- `STRIPE_SECRET_KEY` — `sk_test_...` from https://dashboard.stripe.com/test/apikeys
+- `VITE_CHECKOUT_API_URL=self` — tells the frontend build to call same-origin `/api/checkout`
+
+**Mirror deployment — GitHub Pages** at https://1seansean1.github.io/choo-choo-chooser via `.github/workflows/deploy.yml`. The Pages mirror runs in mock-checkout mode (no `VITE_CHECKOUT_API_URL`), so the cart and UX work but the "Pay" button issues fake confirmation codes. The Vercel deploy is the real one.
+
+## Payments (Stripe Checkout, test mode)
+
+The cart's "Pay" button posts to `/api/checkout`, which uses the bundled catalog to recompute prices server-side (the client cannot influence `unit_amount`) and creates a real [Stripe Checkout Session](https://stripe.com/docs/payments/checkout). The browser is redirected to Stripe's hosted page, the customer enters their card, Stripe charges and redirects back to `/?session_id=cs_test_...`, the app fetches `/api/session/:id`, and renders the confirmation panel with the real Stripe session id + amount + `livemode` flag.
+
+To test on the live site: add anything to the cart, check out, enter any email, click **Pay**, then on Stripe's page use card `4242 4242 4242 4242`, any future expiry, any CVC. The dashboard at https://dashboard.stripe.com/test/payments shows the (test-mode, no-real-money) charge.
+
+**To flip to live mode:** rotate the Vercel env var `STRIPE_SECRET_KEY` to `sk_live_...`. **Do not flip to live without an actual ticket inventory** — without real fulfillment, every charge is "services not provided" the moment the train departs without the buyer aboard. See `docs/architecture/architecture.v1.md` for the rail-aggregator paths that make live mode legal.
 
 ## Layout
 

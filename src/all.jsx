@@ -1434,7 +1434,13 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
   const brand = window.cardBrand(card.num);
   const cardValid = card.name.trim() && _digits(card.num).length >= 15 && card.exp.length === 5 && _digits(card.cvc).length >= 3;
   const emailValid = /@/.test(email);
-  const payReady = emailValid && (!usingNew || cardValid) && (!createAcct || acctPw.length >= 4);
+  // When a real Stripe backend is wired, the card is collected on Stripe's
+  // hosted page; we only need a valid email here. Otherwise (mock mode), keep
+  // requiring the legacy in-form card details.
+  const stripeBackend = !!(typeof window !== "undefined" && window.CHECKOUT_API_ENABLED);
+  const payReady = stripeBackend
+    ? emailValid
+    : (emailValid && (!usingNew || cardValid) && (!createAcct || acctPw.length >= 4));
 
   const fmtCardNum = v => _digits(v).slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
   const fmtExp = v => { const d = _digits(v).slice(0, 4); return d.length >= 3 ? d.slice(0, 2) + "/" + d.slice(2) : d; };
@@ -1479,7 +1485,7 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
 
     // If the backend isn't configured, fall back to the original mock so the
     // app still works for local dev / portfolio viewing.
-    if (!window.CHECKOUT_API_URL) {
+    if (!window.CHECKOUT_API_ENABLED) {
       setTimeout(() => {
         const tickets = items.map(it => ({
           id: it.id || Math.random().toString(36).slice(2),
@@ -1496,9 +1502,10 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
       return;
     }
 
-    // Real path: ask the Worker for a Stripe Checkout Session and redirect.
+    // Real path: ask the backend for a Stripe Checkout Session and redirect.
     try {
-      const r = await fetch(window.CHECKOUT_API_URL.replace(/\/$/, "") + "/api/checkout", {
+      const base = (window.CHECKOUT_API_URL || "").replace(/\/$/, "");
+      const r = await fetch(base + "/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1591,6 +1598,17 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
           {step === 2 && <>
             <div className="pay-paying">Paying as <b>{email || "guest"}</b>{!acct && <button className="pp-link" onClick={() => window.Store.openAuth("signin")}>Sign in</button>}</div>
 
+            {stripeBackend ? (
+              <div style={{padding: "18px 16px", border: "1px dashed var(--line)", borderRadius: "var(--r)", background: "var(--surface)", margin: "8px 0 14px", lineHeight: 1.45}}>
+                <div style={{display: "flex", alignItems: "center", gap: 9, marginBottom: 6}}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                  <b>Secure payment on Stripe</b>
+                </div>
+                <div style={{fontSize: 13.5, color: "var(--ink-soft)"}}>
+                  Click <b>Pay {_money(totals.total)}</b> below to continue to Stripe's hosted checkout page. You'll enter your card there and be returned here when payment completes. <b>Test mode</b> — use card <span className="mono">4242 4242 4242 4242</span>, any future expiry, any CVC.
+                </div>
+              </div>
+            ) : (<>
             <button className="link-express" onClick={() => pay(true)} disabled={processing}>
               <span className="le-badge">link</span> Pay instantly with Link
             </button>
@@ -1631,6 +1649,7 @@ function Checkout({ items: inItems, opts, onClose, onDone }) {
             </div>}
 
             <div className="pay-secure"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>Payments secured by <b>Stripe</b> · test mode — no real charge.</div>
+            </>)}
           </>}
 
           {/* ---------- STEP 3: confirmation ---------- */}
@@ -2335,11 +2354,12 @@ function App() {
       window.Store.toast("Checkout cancelled");
       return;
     }
-    if (!sessionId || !window.CHECKOUT_API_URL) return;
+    if (!sessionId || !window.CHECKOUT_API_ENABLED) return;
     let cancelledFlag = false;
     (async () => {
       try {
-        const r = await fetch(window.CHECKOUT_API_URL.replace(/\/$/, "") + "/api/session/" + encodeURIComponent(sessionId));
+        const base = (window.CHECKOUT_API_URL || "").replace(/\/$/, "");
+        const r = await fetch(base + "/api/session/" + encodeURIComponent(sessionId));
         const j = await r.json();
         if (cancelledFlag) return;
         if (!r.ok) throw new Error(j.error || "session lookup failed");
